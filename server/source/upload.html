@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload de Fichier MP3</title>
+    <title>Proposer un son</title>
 </head>
 <body>
-    <h1>Téléchargez votre fichier MP3</h1>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".mp3" required><br><br>
-        <input type="submit" value="Télécharger">
+    <h1>Envoyer un texte</h1>
+    <form action="/upload" method="post">
+        <label for="text">URL :</label>
+        <input type="text" id="text" name="text" required>
+        <input type="submit" value="Envoyer">
     </form>
-    
-    <button onclick="window.location.href='/'">Retour</button>
 </body>
 </html>
