@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload de Fichier MP3</title>
+</head>
+<body>
+    <h1>Téléchargez votre fichier MP3</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".mp3" required><br><br>
+        <input type="submit" value="Télécharger">
+    </form>
+    
+    <button onclick="window.location.href='/'">Retour</button>
+</body>
+</html>
