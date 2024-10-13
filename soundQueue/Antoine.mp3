@@ -1,0 +1,16 @@
+Encoding: gzip, deflate, br, zstd
+Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+
+etch-User: ?1
+Sec-Fetch-Dest: document
+Referer: http://127.0.0.1/upload
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+
+------WebKitFormBoundary3GjRTHxkBqhB8mu6
+Content-Disposition: form-data; name="file"; filename="Antoine.mp3"
+Content-Type: audio/mpeg
+
+
+------WebKitFormBoundary3GjRTHxkBqhB8mu6--
+ðHÍþ

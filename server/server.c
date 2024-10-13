@@ -7,7 +7,6 @@
 #define PORT 80
 #define BUFFER_SIZE 4096
 #define MAX_FILENAME_SIZE 256
-#define HTML_FILE "index.html"
 
 void error(const char *msg) {
     perror(msg);
@@ -44,7 +43,13 @@ void serve_index(int client_socket, char* pageName) {
 }
 
 void handle_upload(int client_socket, const char *filename, const char *body, size_t body_length) {
-    FILE *fp = fopen(filename, "wb");
+    printf("Filename: [%s]\n", filename);
+    char finalFilename[MAX_FILENAME_SIZE];
+    finalFilename[0] = '\0';
+    strcat(finalFilename, "../soundQueue/");
+    strcat(finalFilename, filename);
+    printf("Finale filename: [%s]\n", finalFilename);
+    FILE *fp = fopen(finalFilename, "wb");
     if (fp == NULL) {
         send_response(client_socket, "500 Internal Server Error", "text/plain", "Failed to open file");
         return;
@@ -52,7 +57,7 @@ void handle_upload(int client_socket, const char *filename, const char *body, si
 
     fwrite(body, sizeof(char), body_length, fp);
     fclose(fp);
-    serve_index(client_socket, "uploadDone.html");
+    serve_index(client_socket, "source/uploadDone.html");
 }
 
 void parse_filename(const char *header, char *filename) {
@@ -66,6 +71,10 @@ void parse_filename(const char *header, char *filename) {
         }
         filename[i] = '\0';
     }
+    else
+    {
+        printf("Error in parse_filename\n");
+    }
 }
 
 
@@ -73,34 +82,32 @@ void parse_filename(const char *header, char *filename) {
 void handle_request(int client_socket) {
     char buffer[BUFFER_SIZE];
     recv(client_socket, buffer, sizeof(buffer) - 1, 0);
-    buffer[sizeof(buffer) - 1] = '\0'; // Assurez-vous que le buffer est null-terminé
-
-    
+    buffer[sizeof(buffer) - 1] = '\0'; //  null-terminé
 
     // GET /
     if (strstr(buffer, "GET / ") != NULL) 
     {
         // Servir le fichier HTML
-        serve_index(client_socket, "index.html");
+        serve_index(client_socket, "source/index.html");
     }
 
     // GET /upload
     if (strstr(buffer, "GET /upload ") != NULL) 
     {
         // Servir le fichier HTML
-        serve_index(client_socket, "upload.html");
+        serve_index(client_socket, "source/upload.html");
     }
 
     // POST /upload
     if (strstr(buffer, "POST /upload") != NULL) {
         char filename[MAX_FILENAME_SIZE] = "defaultName.mp3";
+        memset(filename, 0, sizeof(filename));
         char *content_start = strstr(buffer, "\r\n\r\n");
 
         if (content_start) {
             content_start += 4; // skip \r\n\r\n
             size_t body_length = strlen(content_start);
             parse_filename(buffer, filename);
-            printf("Filename: [%s]\n", filename);
             handle_upload(client_socket, filename, content_start, body_length);
         } else {
             send_response(client_socket, "400 Bad Request", "text/plain", "Invalid request");
