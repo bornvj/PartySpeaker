@@ -13,8 +13,6 @@ void error(const char *msg) {
     exit(EXIT_FAILURE);
 }
 
-
-
 void send_response(int client_socket, const char *status, const char *content_type, const char *body) {
     char response[BUFFER_SIZE];
     snprintf(response, sizeof(response),
@@ -44,17 +42,16 @@ void serve_index(int client_socket, char* pageName) {
 }
 
 void handle_upload(int client_socket, const char *body, size_t body_length) {
-    body += 5; // skip 'text='
     printf("Received text: [%.*s]\n", (int)body_length, body);
     
     // Enregistrer le texte dans un fichier
-    FILE *fp = fopen("../soundQueue/text.txt", "a");
+    FILE *fp = fopen("../soundQueue/queue.txt", "a");
     if (fp == NULL) {
         send_response(client_socket, "500 Internal Server Error", "text/plain", "Failed to open file");
         return;
     }
 
-    fwrite(body, sizeof(char), body_length, fp);
+    fwrite(body, sizeof(char), body_length - 6, fp);
     fclose(fp);
     
     serve_index(client_socket, "source/uploadDone.html");
@@ -96,6 +93,11 @@ void handle_request(int client_socket) {
 }
 
 int main() {
+    // Vide le fichier queue.txt
+    FILE *fp = fopen("../soundQueue/queue.txt", "w");
+    fclose(fp);
+
+
     int server_fd, client_socket;
     struct sockaddr_in address;
     int opt = 1;
