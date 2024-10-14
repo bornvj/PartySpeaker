@@ -13,6 +13,23 @@ void error(const char *msg) {
     exit(EXIT_FAILURE);
 }
 
+void decode_url(const char *src, char *dest) {
+    while (*src) {
+        if (*src == '%') {
+            int value;
+            sscanf(src + 1, "%2x", &value);
+            *dest++ = (char)value;
+            src += 3;
+        } else if (*src == '+') {
+            *dest++ = ' ';
+            src++;
+        } else {
+            *dest++ = *src++;
+        }
+    }
+    *dest = '\0';
+}
+
 void send_response(int client_socket, const char *status, const char *content_type, const char *body) {
     char response[BUFFER_SIZE];
     snprintf(response, sizeof(response),
@@ -41,9 +58,7 @@ void serve_index(int client_socket, char* pageName) {
     send_response(client_socket, "200 OK", "text/html", html);
 }
 
-void handle_upload(int client_socket, const char *body, size_t body_length) {
-    printf("Received text: [%.*s]\n", (int)body_length, body);
-    
+void handle_upload(int client_socket, const char *body) {
     // Enregistrer le texte dans un fichier
     FILE *fp = fopen("../soundQueue/queue.txt", "a");
     if (fp == NULL) {
@@ -51,7 +66,18 @@ void handle_upload(int client_socket, const char *body, size_t body_length) {
         return;
     }
 
-    fwrite(body, sizeof(char), body_length - 6, fp);
+    const char* text = body + strlen("text="); // avoir le pointeur vers le text sans 'text='
+    char decodedText[sizeof(text)];
+
+    decode_url(decodedText, text);
+
+    printf("Received link: [%s]\n", text);
+
+    char* end = "\n";
+
+    // TODO: fix
+    fwrite(decodedText, sizeof(char), strlen(decodedText),  fp);
+    fwrite(end, sizeof(char), strlen(end),  fp);
     fclose(fp);
     
     serve_index(client_socket, "source/uploadDone.html");
@@ -60,6 +86,7 @@ void handle_upload(int client_socket, const char *body, size_t body_length) {
 
 void handle_request(int client_socket) {
     char buffer[BUFFER_SIZE];
+    memset(buffer, 0, sizeof(buffer));
     recv(client_socket, buffer, sizeof(buffer) - 1, 0);
     buffer[sizeof(buffer) - 1] = '\0'; //  null-terminé
 
@@ -82,9 +109,8 @@ void handle_request(int client_socket) {
 
         if (content_start) {
             content_start += 4; // Skip \r\n\r\n
-            size_t body_length = strlen(content_start);
             
-            handle_upload(client_socket, content_start, body_length);
+            handle_upload(client_socket, content_start);
         } else {
             send_response(client_socket, "400 Bad Request", "text/plain", "Invalid request");
         }
