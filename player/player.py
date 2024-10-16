@@ -35,6 +35,10 @@ while True:
                     print("Download completed successfully.")
                 except Exception as e:
                     print(f"Error occurred: {e}")
+
+                # TODO: play the file and delete the file
+                # TODO: get the name of the song for the website instead of the link
+                # TODO: send the C server the info of the current line status to avoid printing already played song
         else:
             print(".", end = "\n")
             time.sleep(3)

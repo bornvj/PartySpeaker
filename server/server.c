@@ -54,7 +54,7 @@ void serve_index(int client_socket, char* pageName) {
     char html[BUFFER_SIZE];
     memset(html, 0, sizeof(html));
     fread(html, sizeof(char), sizeof(html) - 1, fp);
-    if (strcmp(pageName, "source/index.html"))
+    if (strcmp(pageName, "source/index.html") == 0)
     {
         // customiser la page HTML si c'est l'index
         char saveHtml[BUFFER_SIZE];
@@ -65,17 +65,17 @@ void serve_index(int client_socket, char* pageName) {
         ptr++;
         *ptr = '\0';
 
+        //char* stringToInsert = "<h4>Je suis une ligne du fichier\nEt moi une autre\n</h4>";
+        //strcat(ptr, stringToInsert);
 
-        FILE *tracks = fopen("../soundQueue", "r");
-
-        
-        
-
+        FILE *tracks = fopen("../soundQueue/queue.txt", "r");   
 
         char line[BUFFER_SIZE];
         memset(line, 0, sizeof(line));
         while (fgets(line, sizeof(line), tracks)) {
+            strcat(ptr, "<h4>");
             strcat(ptr, line); // Ajouter la ligne au contenu
+            strcat(ptr, "</h4>\n");
         }
         fclose(tracks);
 
