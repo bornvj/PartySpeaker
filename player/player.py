@@ -36,7 +36,7 @@ while True:
                 except Exception as e:
                     print(f"Error occurred: {e}")
         else:
-            print(".", end = "")
+            print(".", end = "\n")
             time.sleep(3)
 
 exit()

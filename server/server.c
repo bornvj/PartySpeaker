@@ -67,19 +67,19 @@ void handle_upload(int client_socket, const char *body) {
     }
 
     const char* text = body + strlen("text="); // avoir le pointeur vers le text sans 'text='
-    char decodedText[sizeof(text)];
+    char* decodedText = malloc(strlen(text) + 1);
 
-    decode_url(decodedText, text);
+    decode_url(text, decodedText);
 
-    printf("Received link: [%s]\n", text);
-
+    printf("Received decode: [%s]\n\n", decodedText);
     char* end = "\n";
 
-    // TODO: fix
     fwrite(decodedText, sizeof(char), strlen(decodedText),  fp);
     fwrite(end, sizeof(char), strlen(end),  fp);
     fclose(fp);
-    
+   
+    free(decodedText);
+
     serve_index(client_socket, "source/uploadDone.html");
 }
 
