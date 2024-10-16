@@ -4,10 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page d'accueil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .container {
+            text-align: center;
+            margin: 50px auto;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <h1>Bienvenue sur notre serveur</h1>
-    <p>Cliquez sur le bouton ci-dessous pour soumettre un son!.</p>
-    <button onclick="window.location.href='/upload'">proposer un son</button>
+    <div class="header">
+        Nom du Site
+    </div>
+    <div class="container">
+        <h1>Bienvenue sur notre serveur</h1>
+        <p>Cliquez sur le bouton ci-dessous pour soumettre un son!</p>
+        <button onclick="window.location.href='/upload'">Proposer un son</button>
+    </div>
 </body>
 </html>

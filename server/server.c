@@ -13,6 +13,7 @@ void error(const char *msg) {
     exit(EXIT_FAILURE);
 }
 
+// Decode un URL vers une string utilisable
 void decode_url(const char *src, char *dest) {
     while (*src) {
         if (*src == '%') {
@@ -30,6 +31,7 @@ void decode_url(const char *src, char *dest) {
     *dest = '\0';
 }
 
+// Envoie une reponse
 void send_response(int client_socket, const char *status, const char *content_type, const char *body) {
     char response[BUFFER_SIZE];
     snprintf(response, sizeof(response),
@@ -71,7 +73,7 @@ void handle_upload(int client_socket, const char *body) {
 
     decode_url(text, decodedText);
 
-    printf("Received decode: [%s]\n\n", decodedText);
+    printf("Received decode: [%s]\n", decodedText);
     char* end = "\n";
 
     fwrite(decodedText, sizeof(char), strlen(decodedText),  fp);
