@@ -6,8 +6,8 @@
 
 #define PORT 80
 #define BUFFER_SIZE 4096
-#define MAX_FILENAME_SIZE 256
 
+// Default error handler
 void error(const char *msg) {
     perror(msg);
     exit(EXIT_FAILURE);
@@ -54,6 +54,32 @@ void serve_index(int client_socket, char* pageName) {
     char html[BUFFER_SIZE];
     memset(html, 0, sizeof(html));
     fread(html, sizeof(char), sizeof(html) - 1, fp);
+    if (strcmp(pageName, "source/index.html"))
+    {
+        // customiser la page HTML si c'est l'index
+        char saveHtml[BUFFER_SIZE];
+
+        char* ptr = strstr(html, "-->");
+        ptr += strlen("-->\n");
+        strcpy(saveHtml, ptr);
+        ptr++;
+        *ptr = '\0';
+
+
+        FILE *tracks = fopen("../soundQueue", "r");
+
+        
+        
+
+
+        char line[BUFFER_SIZE];
+        memset(line, 0, sizeof(line));
+        while (fgets(line, sizeof(line), tracks)) {
+            strcat(ptr, line); // Ajouter la ligne au contenu
+        }
+        fclose(tracks);
+
+    }
     html[sizeof(html) - 1] = '\0'; // Assurez-vous que le buffer est null-terminé
     fclose(fp);
     
