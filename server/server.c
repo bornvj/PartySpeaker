@@ -54,7 +54,7 @@ void serve_index(int client_socket, char* pageName) {
     char html[BUFFER_SIZE];
     memset(html, 0, sizeof(html));
     fread(html, sizeof(char), sizeof(html) - 1, fp);
-    if (strcmp(pageName, "source/index.html") == 0)
+    if (strcmp(pageName, "server/source/index.html") == 0)
     {
         // customiser la page HTML si c'est l'index
         char saveHtml[BUFFER_SIZE];
@@ -68,7 +68,13 @@ void serve_index(int client_socket, char* pageName) {
         //char* stringToInsert = "<h4>Je suis une ligne du fichier\nEt moi une autre\n</h4>";
         //strcat(ptr, stringToInsert);
 
-        FILE *tracks = fopen("../soundQueue/queue.txt", "r");   
+        char* count = getenv("LINECOUNT");
+        if(count)
+            printf("%s\n", count);
+        else
+            printf("pas de varriable env\n");
+
+        FILE *tracks = fopen("soundQueue/titles.txt", "r");   
 
         char line[BUFFER_SIZE];
         memset(line, 0, sizeof(line));
@@ -88,7 +94,7 @@ void serve_index(int client_socket, char* pageName) {
 
 void handle_upload(int client_socket, const char *body) {
     // Enregistrer le texte dans un fichier
-    FILE *fp = fopen("../soundQueue/queue.txt", "a");
+    FILE *fp = fopen("soundQueue/queue.txt", "a");
     if (fp == NULL) {
         send_response(client_socket, "500 Internal Server Error", "text/plain", "Failed to open file");
         return;
@@ -108,7 +114,7 @@ void handle_upload(int client_socket, const char *body) {
    
     free(decodedText);
 
-    serve_index(client_socket, "source/uploadDone.html");
+    serve_index(client_socket, "server/source/uploadDone.html");
 }
 
 
@@ -121,14 +127,14 @@ void handle_request(int client_socket) {
     // GET /
     if (strstr(buffer, "GET / ") != NULL) 
     {
-        serve_index(client_socket, "source/index.html"); // envoie la racine
+        serve_index(client_socket, "server/source/index.html"); // envoie la racine
         return;
     }
 
     // GET /upload
     if (strstr(buffer, "GET /upload ") != NULL) 
     {
-        serve_index(client_socket, "source/upload.html"); // envoie le lien pour rediriger a la racine
+        serve_index(client_socket, "server/source/upload.html"); // envoie le lien pour rediriger a la racine
         return;
     }
 
@@ -148,7 +154,7 @@ void handle_request(int client_socket) {
 
 int main() {
     // Vide le fichier queue.txt
-    FILE *fp = fopen("../soundQueue/queue.txt", "w");
+    FILE *fp = fopen("soundQueue/queue.txt", "w");
     fclose(fp);
 
 
