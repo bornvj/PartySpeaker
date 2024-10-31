@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <sys/stat.h>
 
 #define PORT 80
 #define BUFFER_SIZE 4096
@@ -74,7 +75,7 @@ void serve_index(int client_socket, char* pageName) {
         else
             printf("pas de varriable env\n");
 
-        FILE *tracks = fopen("soundQueue/titles.txt", "r");   
+        FILE *tracks = fopen("soundQueue/titles.txt", "r");
 
         char line[BUFFER_SIZE];
         memset(line, 0, sizeof(line));
@@ -88,7 +89,7 @@ void serve_index(int client_socket, char* pageName) {
     }
     html[sizeof(html) - 1] = '\0'; // Assurez-vous que le buffer est null-terminé
     fclose(fp);
-    
+
     send_response(client_socket, "200 OK", "text/html", html);
 }
 
@@ -111,7 +112,7 @@ void handle_upload(int client_socket, const char *body) {
     fwrite(decodedText, sizeof(char), strlen(decodedText),  fp);
     fwrite(end, sizeof(char), strlen(end),  fp);
     fclose(fp);
-   
+
     free(decodedText);
 
     serve_index(client_socket, "server/source/uploadDone.html");
@@ -125,14 +126,14 @@ void handle_request(int client_socket) {
     buffer[sizeof(buffer) - 1] = '\0'; //  null-terminé
 
     // GET /
-    if (strstr(buffer, "GET / ") != NULL) 
+    if (strstr(buffer, "GET / ") != NULL)
     {
         serve_index(client_socket, "server/source/index.html"); // envoie la racine
         return;
     }
 
     // GET /upload
-    if (strstr(buffer, "GET /upload ") != NULL) 
+    if (strstr(buffer, "GET /upload ") != NULL)
     {
         serve_index(client_socket, "server/source/upload.html"); // envoie le lien pour rediriger a la racine
         return;
@@ -143,7 +144,7 @@ void handle_request(int client_socket) {
 
         if (content_start) {
             content_start += 4; // Skip \r\n\r\n
-            
+
             handle_upload(client_socket, content_start);
         } else {
             send_response(client_socket, "400 Bad Request", "text/plain", "Invalid request");
@@ -152,11 +153,18 @@ void handle_request(int client_socket) {
     }
 }
 
-int main() {
-    // Vide le fichier queue.txt
-    FILE *fp = fopen("soundQueue/queue.txt", "w");
+int create_file(const char* path)
+{
+    FILE *fp = fopen(path, "w");
     fclose(fp);
+    chmod(path, 0777);
+    return 0;
+}
 
+int main() {
+    // Recrée queue.txt et titles.txt
+    create_file("soundQueue/queue.txt");
+    create_file("soundQueue/titles.txt");
 
     int server_fd, client_socket;
     struct sockaddr_in address;

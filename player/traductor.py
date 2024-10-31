@@ -1,11 +1,13 @@
-from pytube import YouTube
+import requests
+from bs4 import BeautifulSoup
 
 def get_video_title(video_url):
+    r = requests.get(video_url)
     try:
-        yt = YouTube(video_url)
-        return yt.title
+        soup = BeautifulSoup(r.text, 'html.parser')
+        return soup.find("title").text
     except Exception as e:
-        return None
+        return video_url
 
 
 with open("soundQueue/queue.txt", 'r') as infile, open('soundQueue/titles.txt', 'w') as outfile:
