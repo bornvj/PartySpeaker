@@ -1,4 +1,4 @@
 .venv/
-soundQueue/queue.txt
+soundQueue/*.txt
 *.bin
 *.mp3
