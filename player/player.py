@@ -19,7 +19,7 @@ ydl_opts = {
 
 file = 'soundQueue/queue.txt'
 currentLine = 0
-pygame.mixer.init() 
+pygame.mixer.init()
 
 while True:
     subprocess.run(['python3', 'player/traductor.py']) # run a traductor
@@ -27,7 +27,7 @@ while True:
     with open(file, 'r') as fichier:
         # Lire toutes les lignes dans une liste
         lines = fichier.readlines()
-        
+
         count = len(lines)
 
         # Vérifier si currentLine est dans la plage
