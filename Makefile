@@ -1,6 +1,6 @@
 CC = gcc
 LDFLAGS =
-CFLAGS = -O0 -g -fsanitize=address
+CFLAGS = -O0 -g -Wall -Wextra
 
 SRC_FILES = server/server.c
 BIN_FILE = server.bin

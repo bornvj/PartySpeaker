@@ -4,6 +4,7 @@ import os
 import glob
 import pygame
 import subprocess
+from traductor import write_titles
 
 ydl_opts = {
         'format': 'bestaudio/best',  # Télécharger la meilleure qualité audio
@@ -15,6 +16,7 @@ ydl_opts = {
             'preferredcodec': 'mp3',
             'preferredquality': '192',
         }],
+        'enable_file_urls': True, # To add another vulnerability hehe
     }
 
 file = 'soundQueue/queue.txt'
@@ -22,8 +24,8 @@ currentLine = 0
 pygame.mixer.init()
 
 while True:
-    subprocess.run(['python3', 'player/traductor.py']) # run a traductor
-    os.environ['LINECOUNT'] = str(currentLine)
+    # subprocess.run(['python3', 'player/traductor.py']) # run a traductor
+    write_titles(currentLine)
     with open(file, 'r') as fichier:
         # Lire toutes les lignes dans une liste
         lines = fichier.readlines()

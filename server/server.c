@@ -69,12 +69,6 @@ void serve_index(int client_socket, char* pageName) {
         //char* stringToInsert = "<h4>Je suis une ligne du fichier\nEt moi une autre\n</h4>";
         //strcat(ptr, stringToInsert);
 
-        char* count = getenv("LINECOUNT");
-        if(count)
-            printf("%s\n", count);
-        else
-            printf("pas de varriable env\n");
-
         FILE *tracks = fopen("soundQueue/titles.txt", "r");
 
         char line[BUFFER_SIZE];
