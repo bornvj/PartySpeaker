@@ -2,3 +2,5 @@
 soundQueue/*.txt
 *.bin
 *.mp3
+*.audio
+__pycache__/

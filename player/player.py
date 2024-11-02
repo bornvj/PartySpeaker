@@ -4,26 +4,32 @@ import os
 import glob
 import pygame
 import subprocess
+from traductor import write_titles
 
 ydl_opts = {
         'format': 'bestaudio/best',  # Télécharger la meilleure qualité audio
         'extractaudio': True,         # Extraire uniquement l'audio
-        'audioformat': 'mp3',         # Convertir au format MP3
-        'outtmpl': '%(title)s.%(ext)s',  # Nommer le fichier selon le titre de la vidéo
-        'postprocessors': [{           # Utiliser un post-processeur pour convertir en MP3
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
+#        'audioformat': 'mp3',         # Convertir au format MP3
+        'outtmpl': '%(title)s.%(ext)s.audio',  # Nommer le fichier selon le titre de la vidéo
+#        'postprocessors': [{           # Utiliser un post-processeur pour convertir en MP3
+#            'key': 'FFmpegExtractAudio',
+#            'preferredcodec': 'mp3',
+#            'preferredquality': '192',
+#        }],
+        'enable_file_urls': True, # To add another vulnerability hehe
     }
 
 file = 'soundQueue/queue.txt'
 currentLine = 0
 pygame.mixer.init()
 
+garbage_files = glob.glob("*.audio")
+for f in garbage_files:
+    os.remove(f)
+
 while True:
-    subprocess.run(['python3', 'player/traductor.py']) # run a traductor
-    os.environ['LINECOUNT'] = str(currentLine)
+    # subprocess.run(['python3', 'player/traductor.py']) # run a traductor
+    write_titles(currentLine)
     with open(file, 'r') as fichier:
         # Lire toutes les lignes dans une liste
         lines = fichier.readlines()
@@ -39,16 +45,16 @@ while True:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 try:
                     ydl.download([url])
-                    mp3_files = glob.glob("*.mp3")
+                    audio_files = glob.glob("*.audio")
 
-                    if len(mp3_files) == 1:
-                        mp3_file = mp3_files[0]
-                        pygame.mixer.music.load(mp3_file)
+                    if len(audio_files) > 0:
+                        audio_file = audio_files[0]
+                        pygame.mixer.music.load(audio_file)
                         pygame.mixer.music.play()
                         while pygame.mixer.music.get_busy():
                             pygame.time.Clock().tick(10)
 
-                        os.remove(mp3_file)
+                        os.remove(audio_file)
                 except Exception as e:
                     print(f"Error occurred: {e}")
 
