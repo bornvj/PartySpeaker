@@ -56,7 +56,6 @@ while True:
                         pygame.mixer.music.play()
                         while pygame.mixer.music.get_busy():
                             pygame.time.Clock().tick(10)
-                            write_titles(currentLine)
 
                         os.remove(audio_file)
                 except Exception as e:
