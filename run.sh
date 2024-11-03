@@ -1,4 +1,4 @@
 #!/bin/sh
 
 ./server.bin &
-python ./player/player.py &
+python3 ./player/player.py &
