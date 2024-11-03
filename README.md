@@ -54,24 +54,16 @@ Software :
 * Makefile
 
 ### Installation et exécution
-
+Si vous souhaitez installer le programme sur une nouvelle machine : 
 1. Installation
 ```
 git clone https://github.com/bornvj/PartySpeaker.git
 cd PartySpeaker
-cd player
-pip install -r requirements.txt
-cd ../
-make
+make install
 ```
 2. Exécution
 ```
-sudo server.bin
-```
-3. Ouvrir une autre session
-```
-cd PartySpeaker/
-python3 player/player.bin
+sudo make run
 ```
 
 ### Utilisation
