@@ -63,17 +63,20 @@ cd player
 pip install -r requirements.txt
 cd ../
 make
-
 ```
 2. Exécution
 ```
 sudo server.bin
-python3 player/player.py
+```
+3. Ouvrir une autre session
+```
+cd PartySpeaker/
+python3 player/player.bin
 ```
 
 ### Utilisation
 1. Se connecter au même réseau local que le serveur. (Raspberry Pi ou ordinateur)
-2. Ouvrir un navigateur web et aller sur `http://raspberry.local/` pour accéder à l'interface web.
+2. Ouvrir un navigateur web et aller sur `http://partyspeaker.local/` pour accéder à l'interface web.
 3. Cliquer sur "Proposer un son".
 ![](https://s3.cri.epita.fr/hedgedoc-data.cri.epita.fr/uploads/9ad8e331-d1b7-430f-9c6c-62c4c6aa3551.png)
 
