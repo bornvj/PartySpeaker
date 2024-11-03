@@ -59,16 +59,16 @@ Software :
 ```
 git clone https://github.com/bornvj/PartySpeaker.git
 cd PartySpeaker
-make
 cd player
 pip install -r requirements.txt
+cd ../
+make
 
 ```
 2. Exécution
 ```
-cd PartySpeaker
 sudo server.bin
-python3 player/player.bin
+python3 player/player.py
 ```
 
 ### Utilisation
@@ -86,7 +86,7 @@ python3 player/player.bin
 Voir vulnerabilities.pdf
 
 ### Auteurs
-* Nicolas PREVOST
-* Titouan GUIONNEAU
-* Mathieu DUBRULLE
-* Xavier PERRIER
+* bornvj
+* cryx3001
+* Mathieu-CS
+* Tsukouille
