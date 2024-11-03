@@ -14,7 +14,7 @@ $(BIN_FILE): $(SRC_FILES)
 	$(CC) $(CFLAGS) $^ -o $@
 
 py_packages:
-	pip install -r player/requirements.txt
+	pip install -r player/requirements.txt --break-system-packages
 
 clean:
 	rm -f $(BIN_FILE) ./soundQueue/*
