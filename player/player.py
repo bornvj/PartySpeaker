@@ -3,7 +3,6 @@ import time
 import os
 import glob
 import pygame
-import subprocess
 from traductor import write_titles
 
 ydl_opts_base = {
@@ -34,17 +33,13 @@ for f in garbage_files:
     os.remove(f)
 
 while True:
-    # subprocess.run(['python3', 'player/traductor.py']) # run a traductor
     write_titles(currentLine)
     with open(file, 'r') as fichier:
-        # Lire toutes les lignes dans une liste
         lines = fichier.readlines()
 
         count = len(lines)
 
-        # Vérifier si currentLine est dans la plage
         if currentLine < count:
-            # Afficher la ligne actuelle
             url = lines[currentLine].strip()
             currentLine += 1
 
@@ -65,12 +60,6 @@ while True:
                         os.remove(audio_file)
                 except Exception as e:
                     print(f"Error occurred: {e}")
-
-                # TODO: play the file and delete the file
-                # TODO: get the name of the song for the website instead of the link
-                # TODO: send the C server the info of the current line status to avoid printing already played song
         else:
-            print(".", end = "\n")
+            print(".")
             time.sleep(3)
-
-exit()

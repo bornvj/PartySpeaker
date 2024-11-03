@@ -1,13 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 def get_video_title(video_url):
     try:
         r = requests.get(video_url)
         soup = BeautifulSoup(r.text, 'html.parser')
         return soup.find("title").text
-    except Exception as e:
+    except Exception:
         return video_url
+
 
 def write_titles(currentLine):
     i = 0
